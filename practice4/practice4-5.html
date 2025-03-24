@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="kr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bootstrap 5</title>
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-
+    SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    /> -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+      integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+    />
+    <!-- 스타일 마지막에 나의 css파일 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!--나의 js파일 마지막에  -->
+    <style>
+      h3 {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" class="container">
+      <h3 class="mt-4">세종대 맛집 추천 투표🍴</h3>
+      <div class="row d-flex">
+        <div
+          class="card col-md-3 m-3 flex-fill"
+          v-for="restaurant in restaurants"
+          :style="{ backgroundColor: getBc(restaurant) }"
+        >
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <h4 class="card-title">{{restaurant.name}}</h4>
+            </div>
+
+            <p class="card-text">
+              <i class="fa-solid fa-star" style="color: orange"></i>평균 평점:
+              {{getAverage(restaurant)}}
+            </p>
+            <p class="card-text">
+              <i class="fa-solid fa-thumbs-up text-primary"></i> 추천 수:
+              {{restaurant.vote}}
+            </p>
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              @click="recommand(restaurant)"
+              style="width: 100%"
+            >
+              <i class="fa-solid fa-thumbs-up"></i> 추천하기
+            </button>
+            <p class="card-text mt-1" v-if="restaurant.vote>=10">
+              <span class="badge bg-danger" style="width: 100%"
+                >🔥 인기 급상승!</span
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+      let vm = Vue.createApp({
+        name: 'App',
+        data() {
+          return {
+            restaurants: [
+              {
+                name: '빠오즈푸',
+                reviews: [4.7, 4.8, 4.6],
+                avg: 0,
+                vote: 0,
+              },
+              {
+                name: '시홍쓰',
+                reviews: [4.2, 4.0, 4.1],
+                avg: 0,
+                vote: 0,
+              },
+              {
+                name: '오사이초밥',
+                reviews: [3.7, 3.6, 3.8],
+                avg: 0,
+                vote: 0,
+              },
+              {
+                name: '은혜즉석떡볶이',
+                reviews: [4.5, 4.6, 4.5],
+                avg: 0,
+                vote: 0,
+              },
+              {
+                name: '우화등선',
+                reviews: [3.2, 3.4, 3.1, 3.0],
+                avg: 0,
+                vote: 0,
+              },
+              {
+                name: '세종원',
+                reviews: [3.9, 4.0, 3.8, 3.5, 4.5],
+                avg: 0,
+                vote: 0,
+              },
+            ],
+            bc: '',
+          };
+        },
+        methods: {
+          getAverage(restaurant) {
+            let reviews = restaurant.reviews;
+            let sum = 0;
+            for (review of reviews) {
+              sum += review;
+            }
+            // let sum = reviews.reduce((acc, cur) => acc + cur, 0);
+            restaurant.avg = (sum /= reviews.length).toFixed(2);
+            return restaurant.avg;
+          },
+          recommand(restaurant) {
+            restaurant.vote++;
+          },
+          getBc(restaurant) {
+            if (restaurant.vote >= 10) {
+              return 'rgb(255, 181, 43)';
+            } else if (restaurant.vote >= 5) {
+              return 'rgb(255, 206, 116)';
+            } else {
+              return 'rgba(246, 246, 246, 0.951)';
+            }
+          },
+        },
+      }).mount('#app');
+    </script>
+  </body>
+</html>
